@@ -5,9 +5,10 @@ import { Highlight } from '@components/Highlight'
 
 import * as S from './styles'
 import { GroupCartd } from '@components/GroupCard'
+import { ListEmpty } from '@components/ListEmpty'
 
 export function Groups() {
-  const [groups, setGroups] = useState<string[]>(['Galera da Itech'])
+  const [groups, setGroups] = useState<string[]>([])
 
   return (
     <S.Container>
@@ -18,6 +19,10 @@ export function Groups() {
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
           <GroupCartd key={`title-${item}`} title={item} />
+        )}
+        contentContainerStyle={groups.length === 0 && { flex: 1 }}
+        ListEmptyComponent={() => (
+          <ListEmpty message="Adicione uma turma para jogar!" />
         )}
       />
     </S.Container>
