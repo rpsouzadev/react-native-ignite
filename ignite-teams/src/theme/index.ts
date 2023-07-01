@@ -26,4 +26,4 @@ export default {
     LG: 18,
     XL: 24,
   },
-}
+} as const
