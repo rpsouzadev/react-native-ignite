@@ -25,7 +25,7 @@ export function Groups() {
           <ListEmpty message="Adicione uma turma para jogar!" />
         )}
       />
-      <Button title="Adicionar" type="SECONDARY" />
+      <Button title="Criar nova turma" />
     </S.Container>
   )
 }
