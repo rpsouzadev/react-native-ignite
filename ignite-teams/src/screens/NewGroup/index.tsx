@@ -1,7 +1,8 @@
 import * as S from './styled'
+import { Input } from '@components/Input'
+import { Button } from '@components/Button'
 import { Header } from '@components/Header'
 import { Highlight } from '@components/Highlight'
-import { Button } from '@components/Button'
 
 export function NewGroup() {
   return (
@@ -13,7 +14,8 @@ export function NewGroup() {
           title="Nova turma"
           subtitle="Crie uma turma para adicionar as pessoas"
         />
-        <Button title="Criar" />
+        <Input placeholder="Nome da turma" />
+        <Button title="Criar" style={{ marginTop: 20 }} />
       </S.Content>
     </S.Container>
   )
