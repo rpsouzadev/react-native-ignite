@@ -8,7 +8,7 @@ import {
 
 import theme from './src/theme'
 
-import { NewGroup } from '@screens/NewGroup'
+import { Players } from '@screens/Players'
 import { Loading } from '@components/Loading'
 
 export default function App() {
@@ -19,7 +19,7 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      {fontsLoaded ? <NewGroup /> : <Loading />}
+      {fontsLoaded ? <Players /> : <Loading />}
       <StatusBar style="light" backgroundColor="transparent" translucent />
     </ThemeProvider>
   )
