@@ -1,8 +1,8 @@
-import { TouchableHighlightProps } from 'react-native'
+import { TouchableOpacityProps } from 'react-native'
 
 import * as S from './styled'
 
-type Props = TouchableHighlightProps & {
+type Props = TouchableOpacityProps & {
   title: string
   type?: S.ButtonTypeStyleProps
 }
