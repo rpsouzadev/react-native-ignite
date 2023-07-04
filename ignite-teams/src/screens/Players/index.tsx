@@ -4,13 +4,15 @@ import { FlatList } from 'react-native'
 import { Input } from '@components/Input'
 import { Header } from '@components/Header'
 import { Filter } from '@components/Filter'
+import { Button } from '@components/Button'
 import { Highlight } from '@components/Highlight'
+import { ListEmpty } from '@components/ListEmpty'
 import { PlayerCard } from '@components/PlayerCard'
 import { ButtonIcon } from '@components/ButtonIcon'
 
 export function Players() {
   const [team, setTeam] = useState('Time A')
-  const [players, setPlayers] = useState(['Rafael'])
+  const [players, setPlayers] = useState([])
   return (
     <S.Container>
       <Header showBackButton />
@@ -34,17 +36,26 @@ export function Players() {
             />
           )}
           horizontal
+          showsHorizontalScrollIndicator={false}
         />
         <S.NumbersOfPlayers>{players.length}</S.NumbersOfPlayers>
       </S.HeaderList>
-
       <FlatList
         data={players}
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
           <PlayerCard name={item} onRemove={() => {}} />
         )}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[
+          { paddingBottom: 100 },
+          players.length === 0 && { flex: 1 },
+        ]}
+        ListEmptyComponent={() => (
+          <ListEmpty message="Adicione jogador ao time!" />
+        )}
       />
+      <Button title="Remover Turma" type="SECONDARY" />
     </S.Container>
   )
 }
