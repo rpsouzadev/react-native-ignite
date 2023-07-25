@@ -1,11 +1,11 @@
 /* eslint-disable no-empty */
 import * as S from './styled'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Input } from '@components/Input'
 import { Header } from '@components/Header'
 import { Filter } from '@components/Filter'
 import { Button } from '@components/Button'
-import { FlatList, Alert } from 'react-native'
+import { FlatList, Alert, TextInput } from 'react-native'
 import { Highlight } from '@components/Highlight'
 import { ListEmpty } from '@components/ListEmpty'
 import { PlayerCard } from '@components/PlayerCard'
@@ -28,6 +28,8 @@ export function Players() {
   const route = useRoute()
   const { group } = route.params as RouteParams
 
+  const newPlayerNameInputRef = useRef<TextInput>(null)
+
   async function handleAddPlayer() {
     if (newPlayerName.trim().length === 0) {
       return Alert.alert('Novo jogador', 'Informe o nome do jogador')
@@ -38,6 +40,8 @@ export function Players() {
     }
     try {
       await playerAddByGroup(newPlayer, group)
+      newPlayerNameInputRef.current?.blur()
+      setNewPlayerName('')
       fetchPlayersByTeam()
     } catch (error) {
       if (error instanceof AppError) {
@@ -61,6 +65,7 @@ export function Players() {
 
   useEffect(() => {
     fetchPlayersByTeam()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [team])
 
   return (
@@ -72,6 +77,10 @@ export function Players() {
           placeholder="Nome da pessoa"
           autoCorrect={false}
           onChangeText={setNewPlayerName}
+          value={newPlayerName}
+          inputRef={newPlayerNameInputRef}
+          onSubmitEditing={handleAddPlayer}
+          returnKeyType="done"
         />
         <ButtonIcon icon="add" onPress={handleAddPlayer} />
       </S.Form>
