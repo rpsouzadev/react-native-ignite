@@ -5,7 +5,7 @@ import { Button } from '@components/Button'
 import LogoSvg from '@assets/logo.svg'
 import { Input } from '@components/Input'
 
-export function SingUp() {
+export function SignUp() {
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1 }}
