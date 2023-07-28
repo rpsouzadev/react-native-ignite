@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native'
+import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
 import { VStack, Image, Text, Center, Heading, ScrollView } from 'native-base'
 
 import BackgroundImg from '@assets/background.png'
@@ -6,14 +8,21 @@ import LogoSvg from '@assets/logo.svg'
 import { Input } from '@components/Input'
 
 export function SignUp() {
+  const navigation = useNavigation<AuthNavigatorRoutesProps>()
+
+  function hadleGoBack() {
+    navigation.goBack()
+  }
+
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1 }}
       showsVerticalScrollIndicator={false}
     >
-      <VStack flex={1} bg="gray.700" px={10} pb={8}>
+      <VStack flex={1} px={10} pb={8}>
         <Image
           source={BackgroundImg}
+          defaultSource={BackgroundImg}
           alt="Pessoas treinando"
           resizeMode="contain"
           position="absolute"
@@ -46,7 +55,11 @@ export function SignUp() {
         </Center>
 
         <Center mt={24} flex={1} justifyContent="flex-end">
-          <Button title="Voltar para o login" variant="outline" />
+          <Button
+            title="Voltar para o login"
+            variant="outline"
+            onPress={hadleGoBack}
+          />
         </Center>
       </VStack>
     </ScrollView>
