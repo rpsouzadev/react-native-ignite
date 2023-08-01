@@ -46,7 +46,7 @@ export function Home() {
         maxH={10}
       />
 
-      <VStack flex={1} px={4}>
+      <VStack flex={1} px={8}>
         <HStack justifyContent="space-between" mb={5}>
           <Heading color="gray.200" fontSize="md">
             Exercícios
