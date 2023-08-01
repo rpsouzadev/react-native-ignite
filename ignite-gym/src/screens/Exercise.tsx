@@ -44,7 +44,7 @@ export function Exercise() {
             Puxada Frontal
           </Heading>
 
-          <HStack>
+          <HStack alignItems="center">
             <BodySvg />
             <Text color="gray.200" ml={1} textTransform="capitalize">
               constas
