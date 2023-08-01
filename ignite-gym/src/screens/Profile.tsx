@@ -1,6 +1,15 @@
 import { useState } from 'react'
 import { TouchableOpacity } from 'react-native'
-import { Center, ScrollView, Skeleton, Text, VStack } from 'native-base'
+import {
+  Center,
+  ScrollView,
+  Skeleton,
+  Text,
+  VStack,
+  useToast,
+} from 'native-base'
+import * as ImagePicker from 'expo-image-picker'
+import * as FileSystem from 'expo-file-system'
 
 import { UserPhoto } from '@components/UserPhoto'
 import { ScreenHeader } from '@components/ScreenHeader'
@@ -11,6 +20,46 @@ const PHOTO_SIZE = 24
 
 export function Profile() {
   const [photoIsLoading, setPhotoIsLoading] = useState(false)
+  const [usePhoto, setUserPhoto] = useState('https://github.com/muglly.png')
+
+  const toast = useToast()
+
+  async function handleUserPhotoSelect() {
+    setPhotoIsLoading(true)
+    try {
+      const photoSelected = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        aspect: [4, 4],
+        allowsEditing: true,
+      })
+
+      if (!photoSelected.canceled) {
+        const photoInfo = await FileSystem.getInfoAsync(
+          photoSelected.assets[0].uri,
+        )
+
+        if (photoInfo.exists && photoInfo.size / 1024 / 1024 > 5) {
+          return toast.show({
+            title: 'essa imagem é muito grande, escolha uma de ate 5MB.',
+            placement: 'top',
+            bgColor: 'red.500',
+          })
+        }
+
+        setUserPhoto(photoSelected.assets[0].uri)
+        toast.show({
+          title: 'Foto trocada com sucesso!',
+          placement: 'top',
+          bgColor: 'green.500',
+        })
+      }
+    } catch (error) {
+      console.log('error: ', error)
+    } finally {
+      setPhotoIsLoading(false)
+    }
+  }
 
   return (
     <VStack flex={1}>
@@ -30,13 +79,13 @@ export function Profile() {
             />
           ) : (
             <UserPhoto
-              source={{ uri: 'https://github.com/muglly.png' }}
+              source={{ uri: usePhoto }}
               alt="foto do usuario"
               size={PHOTO_SIZE}
             />
           )}
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleUserPhotoSelect}>
             <Text
               color="green.500"
               fontSize="md"
