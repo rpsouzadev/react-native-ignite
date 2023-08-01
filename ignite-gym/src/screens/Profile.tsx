@@ -70,7 +70,7 @@ export function Profile() {
             secureTextEntry
           />
 
-          <Button title="Atulizar" mt={4} />
+          <Button title="Atualizar" mt={4} />
         </Center>
       </ScrollView>
     </VStack>

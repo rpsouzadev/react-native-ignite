@@ -1,4 +1,13 @@
-import { Box, HStack, Heading, Icon, Image, Text, VStack } from 'native-base'
+import {
+  Box,
+  HStack,
+  Heading,
+  Icon,
+  Image,
+  Text,
+  VStack,
+  ScrollView,
+} from 'native-base'
 import { TouchableOpacity } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 
@@ -44,39 +53,41 @@ export function Exercise() {
         </HStack>
       </VStack>
 
-      <VStack p={8}>
-        <Image
-          source={{
-            uri: 'https://t3.ftcdn.net/jpg/04/23/44/52/360_F_423445223_M4c9jw0g5dJb7SGWdmzXnnncIIaF9roM.jpg',
-          }}
-          alt="Nome do exercício"
-          w="full"
-          h={80}
-          mb={3}
-          rounded="lg"
-          resizeMode="cover"
-        />
+      <ScrollView>
+        <VStack p={8}>
+          <Image
+            source={{
+              uri: 'https://t3.ftcdn.net/jpg/04/23/44/52/360_F_423445223_M4c9jw0g5dJb7SGWdmzXnnncIIaF9roM.jpg',
+            }}
+            alt="Nome do exercício"
+            w="full"
+            h={80}
+            mb={3}
+            rounded="lg"
+            resizeMode="cover"
+          />
 
-        <Box bg="gray.600" p={4} rounded="lg">
-          <HStack justifyContent="space-around" alignItems="center" mb={6}>
-            <HStack alignItems="center">
-              <SeriesSvg />
-              <Text color="gray.200" ml={1}>
-                3 séries
-              </Text>
+          <Box bg="gray.600" p={4} rounded="lg">
+            <HStack justifyContent="space-around" alignItems="center" mb={6}>
+              <HStack alignItems="center">
+                <SeriesSvg />
+                <Text color="gray.200" ml={1}>
+                  3 séries
+                </Text>
+              </HStack>
+
+              <HStack alignItems="center">
+                <RepetitionsSvg />
+                <Text color="gray.200" ml={1}>
+                  12 repetições
+                </Text>
+              </HStack>
             </HStack>
 
-            <HStack alignItems="center">
-              <RepetitionsSvg />
-              <Text color="gray.200" ml={1}>
-                12 repetições
-              </Text>
-            </HStack>
-          </HStack>
-
-          <Button title="Marcar como realizado" />
-        </Box>
-      </VStack>
+            <Button title="Marcar como realizado" />
+          </Box>
+        </VStack>
+      </ScrollView>
     </VStack>
   )
 }
