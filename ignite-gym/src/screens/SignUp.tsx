@@ -11,7 +11,7 @@ import BackgroundImg from '@assets/background.png'
 import { Input } from '@components/Input'
 import { Button } from '@components/Button'
 
-type FormeDataProps = {
+type FormDataProps = {
   name: string
   email: string
   password: string
@@ -36,7 +36,7 @@ export function SignUp() {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormeDataProps>({
+  } = useForm<FormDataProps>({
     resolver: yupResolver(signUpSchema),
   })
 
@@ -46,7 +46,7 @@ export function SignUp() {
     navigation.goBack()
   }
 
-  function handleSignUp(data: FormeDataProps) {
+  function handleSignUp(data: FormDataProps) {
     console.log('data: ', data)
   }
 
