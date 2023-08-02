@@ -28,7 +28,7 @@ export function ExerciseCard({ ...rest }: Props) {
         />
 
         <VStack flex={1}>
-          <Heading color="white" fontSize="lg">
+          <Heading color="white" fontSize="lg" fontFamily="heading">
             Puxador frontal
           </Heading>
           <Text color="gray.200" fontSize="sm" mt={1} numberOfLines={2}>
