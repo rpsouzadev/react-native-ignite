@@ -1,9 +1,20 @@
-import { useNavigation } from '@react-navigation/native'
+import {
+  VStack,
+  Image,
+  Text,
+  Center,
+  Heading,
+  ScrollView,
+  useToast,
+} from 'native-base'
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
-import { VStack, Image, Text, Center, Heading, ScrollView } from 'native-base'
+import { useNavigation } from '@react-navigation/native'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+
+import axios from 'axios'
+import { api } from '@services/api'
 
 import LogoSvg from '@assets/logo.svg'
 import BackgroundImg from '@assets/background.png'
@@ -40,14 +51,27 @@ export function SignUp() {
     resolver: yupResolver(signUpSchema),
   })
 
+  const toast = useToast()
+
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
 
   function hadleGoBack() {
     navigation.goBack()
   }
 
-  function handleSignUp(data: FormDataProps) {
-    console.log('data: ', data)
+  async function handleSignUp({ name, email, password }: FormDataProps) {
+    try {
+      const response = await api.post('/users', { name, email, password })
+      console.log(response.data)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return toast.show({
+          title: error.response?.data.message,
+          placement: 'top',
+          bgColor: 'red.500',
+        })
+      }
+    }
   }
 
   return (
