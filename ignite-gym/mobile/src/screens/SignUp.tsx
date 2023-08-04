@@ -12,8 +12,8 @@ import { useNavigation } from '@react-navigation/native'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { AppError } from '@utils/AppError'
 
-import axios from 'axios'
 import { api } from '@services/api'
 
 import LogoSvg from '@assets/logo.svg'
@@ -64,13 +64,16 @@ export function SignUp() {
       const response = await api.post('/users', { name, email, password })
       console.log(response.data)
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        return toast.show({
-          title: error.response?.data.message,
-          placement: 'top',
-          bgColor: 'red.500',
-        })
-      }
+      const isAppError = error instanceof AppError
+      const title = isAppError
+        ? error.message
+        : 'Não foi possivel criar a conta, tente novamente mais tarde.'
+
+      return toast.show({
+        title,
+        placement: 'top',
+        bgColor: 'red.500',
+      })
     }
   }
 
