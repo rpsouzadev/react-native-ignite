@@ -1,6 +1,14 @@
 import { useNavigation } from '@react-navigation/native'
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
-import { VStack, Image, Text, Center, Heading, ScrollView } from 'native-base'
+import {
+  VStack,
+  Image,
+  Text,
+  Center,
+  Heading,
+  ScrollView,
+  useToast,
+} from 'native-base'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -12,6 +20,7 @@ import LogoSvg from '@assets/logo.svg'
 
 import { Button } from '@components/Button'
 import { Input } from '@components/Input'
+import { AppError } from '@utils/AppError'
 
 type FormDataProps = {
   email: string
@@ -27,21 +36,35 @@ const signInSchema = yup.object({
 })
 
 export function SignIn() {
+  const navigation = useNavigation<AuthNavigatorRoutesProps>()
   const { signIn } = useAuth()
+  const toast = useToast()
 
   // eslint-disable-next-line prettier/prettier
   const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
     resolver: yupResolver(signInSchema),
   })
 
-  const navigation = useNavigation<AuthNavigatorRoutesProps>()
-
   function handleNewAccount() {
     navigation.navigate('signUp')
   }
 
   async function handleSignIn({ email, password }: FormDataProps) {
-    await signIn(email, password)
+    try {
+      await signIn(email, password)
+    } catch (error) {
+      const isAppError = error instanceof AppError
+      const title = isAppError
+        ? error.message
+        : 'Não foi possível entrar. Tente novamente mais tarde.'
+      console.log(error)
+
+      toast.show({
+        title,
+        placement: 'top',
+        bgColor: 'red.500',
+      })
+    }
   }
 
   return (
