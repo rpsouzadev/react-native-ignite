@@ -5,6 +5,8 @@ import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
+import { useAuth } from '@hooks/useAuth'
+
 import BackgroundImg from '@assets/background.png'
 import LogoSvg from '@assets/logo.svg'
 
@@ -25,11 +27,10 @@ const signInSchema = yup.object({
 })
 
 export function SignIn() {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormDataProps>({
+  const { signIn } = useAuth()
+
+  // eslint-disable-next-line prettier/prettier
+  const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
     resolver: yupResolver(signInSchema),
   })
 
@@ -39,8 +40,8 @@ export function SignIn() {
     navigation.navigate('signUp')
   }
 
-  function handleSignIn(data: FormDataProps) {
-    console.log(data)
+  function handleSignIn({ email, password }: FormDataProps) {
+    signIn(email, password)
   }
 
   return (
@@ -95,6 +96,8 @@ export function SignIn() {
                 onChangeText={onChange}
                 value={value}
                 errorMessage={errors.password?.message}
+                onSubmitEditing={handleSubmit(handleSignIn)}
+                returnKeyType="send"
               />
             )}
           />
