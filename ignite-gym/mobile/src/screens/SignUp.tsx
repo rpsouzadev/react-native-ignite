@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   VStack,
   Image,
@@ -15,6 +16,7 @@ import * as yup from 'yup'
 import { AppError } from '@utils/AppError'
 
 import { api } from '@services/api'
+import { useAuth } from '@hooks/useAuth'
 
 import LogoSvg from '@assets/logo.svg'
 import BackgroundImg from '@assets/background.png'
@@ -43,17 +45,14 @@ const signUpSchema = yup.object({
 })
 
 export function SignUp() {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormDataProps>({
+  const toast = useToast()
+  const { signIn } = useAuth()
+  const [isLoading, setIsLoading] = useState(false)
+  const navigation = useNavigation<AuthNavigatorRoutesProps>()
+  // eslint-disable-next-line prettier/prettier
+  const { control, handleSubmit, formState: { errors }, } = useForm<FormDataProps>({
     resolver: yupResolver(signUpSchema),
   })
-
-  const toast = useToast()
-
-  const navigation = useNavigation<AuthNavigatorRoutesProps>()
 
   function hadleGoBack() {
     navigation.goBack()
@@ -61,19 +60,21 @@ export function SignUp() {
 
   async function handleSignUp({ name, email, password }: FormDataProps) {
     try {
-      const response = await api.post('/users', { name, email, password })
-      console.log(response.data)
+      setIsLoading(true)
+      await api.post('/users', { name, email, password })
+      await signIn(email, password)
     } catch (error) {
       const isAppError = error instanceof AppError
       const title = isAppError
         ? error.message
         : 'Não foi possivel criar a conta, tente novamente mais tarde.'
 
-      return toast.show({
+      toast.show({
         title,
         placement: 'top',
         bgColor: 'red.500',
       })
+      setIsLoading(false)
     }
   }
 
@@ -165,6 +166,7 @@ export function SignUp() {
           <Button
             title="Criar e acessar"
             onPress={handleSubmit(handleSignUp)}
+            isLoading={isLoading}
           />
         </Center>
 
