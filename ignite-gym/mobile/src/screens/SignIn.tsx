@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
 import {
@@ -36,6 +37,7 @@ const signInSchema = yup.object({
 })
 
 export function SignIn() {
+  const [isLoading, setIsLoading] = useState(false)
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
   const { signIn } = useAuth()
   const toast = useToast()
@@ -51,19 +53,20 @@ export function SignIn() {
 
   async function handleSignIn({ email, password }: FormDataProps) {
     try {
+      setIsLoading(true)
       await signIn(email, password)
     } catch (error) {
       const isAppError = error instanceof AppError
       const title = isAppError
         ? error.message
         : 'Não foi possível entrar. Tente novamente mais tarde.'
-      console.log(error)
 
       toast.show({
         title,
         placement: 'top',
         bgColor: 'red.500',
       })
+      setIsLoading(false)
     }
   }
 
@@ -125,7 +128,11 @@ export function SignIn() {
             )}
           />
 
-          <Button title="Acessar" onPress={handleSubmit(handleSignIn)} />
+          <Button
+            title="Acessar"
+            onPress={handleSubmit(handleSignIn)}
+            isLoading={isLoading}
+          />
         </Center>
 
         <Center mt={24} flex={1} justifyContent="flex-end">
