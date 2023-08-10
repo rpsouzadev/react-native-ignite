@@ -4,7 +4,7 @@ import { ReactNode, createContext, useEffect, useState } from 'react'
 // eslint-disable-next-line prettier/prettier
 import { storageUserSave, storageUserGet, storageUserRemove, } from '@storage/storageUser'
 // eslint-disable-next-line prettier/prettier
-import { storageAuthTokenSave, storageAuthTokenGet } from '@storage/storageAuthToken'
+import { storageAuthTokenSave, storageAuthTokenGet, storageAuthTokenRemove } from '@storage/storageAuthToken'
 
 import { UserDTO } from '@dtos/UserDTO'
 import { api } from '@services/api'
@@ -59,8 +59,11 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   async function signOut() {
     try {
       setIsLoadingUserStorageData(true)
+
       setUser({} as UserDTO)
+
       await storageUserRemove()
+      await storageAuthTokenRemove()
     } catch (error) {
       throw error
     } finally {
