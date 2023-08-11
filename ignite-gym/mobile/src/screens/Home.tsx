@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { api } from '@services/api'
 import { AppError } from '@utils/AppError'
+import { ExerciseDTO } from '@dtos/ExerciseDTO'
 
 import { Group } from '@components/Group'
 import { HomeHeader } from '@components/HomeHeader'
@@ -12,7 +13,7 @@ import { ExerciseCard } from '@components/ExerciseCard'
 
 export function Home() {
   const [groups, setGroups] = useState<string[]>([])
-  const [exercises, setExercises] = useState(['1', '2', '3', '4', '5'])
+  const [exercises, setExercises] = useState<ExerciseDTO[]>([])
   const [groupSelected, setGroupSelected] = useState('antebraço')
 
   const toast = useToast()
@@ -45,7 +46,7 @@ export function Home() {
     try {
       const response = await api.get(`/exercises/bygroup/${groupSelected}`)
 
-      console.log('response.data =>', response.data)
+      setExercises(response.data)
     } catch (error) {
       const isAppError = error instanceof AppError
       const title = isAppError
@@ -106,7 +107,7 @@ export function Home() {
 
         <FlatList
           data={exercises}
-          keyExtractor={(item) => item}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <ExerciseCard onPress={handleOpenExerciseDetails} />
           )}
