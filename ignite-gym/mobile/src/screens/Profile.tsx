@@ -74,7 +74,7 @@ export function Profile() {
   const [photoIsLoading, setPhotoIsLoading] = useState(false)
   const [usePhoto, setUserPhoto] = useState('https://github.com/muglly.png')
 
-  const { user } = useAuth()
+  const { user, updateUserProfile } = useAuth()
   const toast = useToast()
 
   // eslint-disable-next-line prettier/prettier
@@ -127,7 +127,12 @@ export function Profile() {
     try {
       setIsUpdating(true)
 
+      const userUpdated = user
+      userUpdated.name = data.name
+
       await api.put('/users', data)
+
+      await updateUserProfile(userUpdated)
 
       toast.show({
         title: 'Dados atulizado com sucesso.',
