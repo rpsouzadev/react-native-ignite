@@ -109,12 +109,21 @@ export function Profile() {
           })
         }
 
-        setUserPhoto(photoSelected.assets[0].uri)
-        toast.show({
-          title: 'Foto trocada com sucesso!',
-          placement: 'top',
-          bgColor: 'green.500',
-        })
+        const fileExtesion = photoSelected.assets[0].uri.split('.').pop()
+
+        const photoFile = {
+          name: `${user.name}.${fileExtesion}`.toLowerCase(),
+          uri: photoSelected.assets[0].uri,
+          type: `${photoSelected.assets[0].type}/${fileExtesion}`.toLowerCase(),
+        }
+
+        console.log('photoFile => ', photoFile)
+
+        // toast.show({
+        //   title: 'Foto trocada com sucesso!',
+        //   placement: 'top',
+        //   bgColor: 'green.500',
+        // })
       }
     } catch (error) {
       console.log('error: ', error)
