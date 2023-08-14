@@ -15,9 +15,10 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
 import { api } from '@services/api'
+import { useAuth } from '@hooks/useAuth'
 import { AppError } from '@utils/AppError'
 
-import { useAuth } from '@hooks/useAuth'
+import defaultUserPhoto from '@assets/userPhotoDefault.png'
 
 import { UserPhoto } from '@components/UserPhoto'
 import { ScreenHeader } from '@components/ScreenHeader'
@@ -72,7 +73,6 @@ const PHOTO_SIZE = 24
 export function Profile() {
   const [isUpdating, setIsUpdating] = useState(false)
   const [photoIsLoading, setPhotoIsLoading] = useState(false)
-  const [usePhoto, setUserPhoto] = useState('https://github.com/muglly.png')
 
   const { user, updateUserProfile } = useAuth()
   const toast = useToast()
@@ -120,11 +120,19 @@ export function Profile() {
         const userPhotoUploadForm = new FormData()
         userPhotoUploadForm.append('avatar', photoFile)
 
-        await api.patch('/users/avatar', userPhotoUploadForm, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
+        const avatarUpdatedResponse = await api.patch(
+          '/users/avatar',
+          userPhotoUploadForm,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
           },
-        })
+        )
+
+        const userUpdated = user
+        userUpdated.avatar = avatarUpdatedResponse.data.avatar
+        updateUserProfile(userUpdated)
 
         toast.show({
           title: 'Foto trocada com sucesso!',
@@ -189,7 +197,11 @@ export function Profile() {
             />
           ) : (
             <UserPhoto
-              source={{ uri: usePhoto }}
+              source={
+                user.avatar
+                  ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` }
+                  : defaultUserPhoto
+              }
               alt="foto do usuario"
               size={PHOTO_SIZE}
             />
