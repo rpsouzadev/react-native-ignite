@@ -115,15 +115,22 @@ export function Profile() {
           name: `${user.name}.${fileExtesion}`.toLowerCase(),
           uri: photoSelected.assets[0].uri,
           type: `${photoSelected.assets[0].type}/${fileExtesion}`.toLowerCase(),
-        }
+        } as any
 
-        console.log('photoFile => ', photoFile)
+        const userPhotoUploadForm = new FormData()
+        userPhotoUploadForm.append('avatar', photoFile)
 
-        // toast.show({
-        //   title: 'Foto trocada com sucesso!',
-        //   placement: 'top',
-        //   bgColor: 'green.500',
-        // })
+        await api.patch('/users/avatar', userPhotoUploadForm, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+
+        toast.show({
+          title: 'Foto trocada com sucesso!',
+          placement: 'top',
+          bgColor: 'green.500',
+        })
       }
     } catch (error) {
       console.log('error: ', error)
