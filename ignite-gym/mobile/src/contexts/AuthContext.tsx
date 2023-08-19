@@ -40,13 +40,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     token: string,
     refresh_token: string,
   ) {
-    const AuthTokens = {
-      token,
-      refresh_token,
-    }
-
     await storageUserSave(userData)
-    await storageAuthTokenSave(AuthTokens)
+    await storageAuthTokenSave({ token, refresh_token })
   }
 
   async function signIn(email: string, password: string) {

@@ -7,8 +7,14 @@ type StorageAuthTokenProps = {
   refresh_token: string
 }
 
-export async function storageAuthTokenSave(AuthTokens: StorageAuthTokenProps) {
-  await AsyncStorage.setItem(AUTH_TOKEN_STORAGE, JSON.stringify(AuthTokens))
+export async function storageAuthTokenSave({
+  token,
+  refresh_token,
+}: StorageAuthTokenProps) {
+  await AsyncStorage.setItem(
+    AUTH_TOKEN_STORAGE,
+    JSON.stringify({ token, refresh_token }),
+  )
 }
 
 export async function storageAuthTokenGet() {
