@@ -59,6 +59,7 @@ api.registerInterceptTokenManager = (signOut) => {
 
           isRefreshing = true
 
+          // eslint-disable-next-line no-async-promise-executor
           return new Promise(async (resolve, reject) => {
             try {
               const { data } = await api.post('/sessions/refresh-token', {
@@ -69,6 +70,23 @@ api.registerInterceptTokenManager = (signOut) => {
                 token: data.token,
                 refresh_token: data.refresh_token,
               })
+
+              if (originalRequestConfig.data) {
+                originalRequestConfig.data = JSON.parse(
+                  originalRequestConfig.data,
+                )
+              }
+
+              originalRequestConfig.headers = {
+                Authorization: `Bearer ${data.token}`,
+              }
+              api.defaults.headers.common.Authorization = `Bearer ${data.token}`
+
+              failedQueue.forEach((request) => {
+                request.onSuccess(data.token)
+              })
+
+              resolve(api(originalRequestConfig))
             } catch (error: any) {
               failedQueue.forEach((request) => {
                 request.onFailure(error)
