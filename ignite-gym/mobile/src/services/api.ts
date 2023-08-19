@@ -1,6 +1,9 @@
 import axios, { AxiosError, AxiosInstance } from 'axios'
 import { AppError } from '@utils/AppError'
-import { storageAuthTokenGet } from '@storage/storageAuthToken'
+import {
+  storageAuthTokenGet,
+  storageAuthTokenSave,
+} from '@storage/storageAuthToken'
 
 type SignOut = () => void
 
@@ -17,7 +20,7 @@ const api = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_URL,
 }) as APIInstanceProps
 
-const failedQueue: Array<PromiseType> = []
+let failedQueue: Array<PromiseType> = []
 let isRefreshing = false
 
 api.registerInterceptTokenManager = (signOut) => {
@@ -33,7 +36,6 @@ api.registerInterceptTokenManager = (signOut) => {
 
           if (!refresh_token) {
             signOut()
-            console.log('SEM REFRESH TOKEN => ', refresh_token)
             return Promise.reject(requestError)
           }
 
@@ -56,6 +58,29 @@ api.registerInterceptTokenManager = (signOut) => {
           }
 
           isRefreshing = true
+
+          return new Promise(async (resolve, reject) => {
+            try {
+              const { data } = await api.post('/sessions/refresh-token', {
+                refresh_token,
+              })
+
+              await storageAuthTokenSave({
+                token: data.token,
+                refresh_token: data.refresh_token,
+              })
+            } catch (error: any) {
+              failedQueue.forEach((request) => {
+                request.onFailure(error)
+              })
+
+              signOut()
+              reject(error)
+            } finally {
+              isRefreshing = false
+              failedQueue = []
+            }
+          })
         }
 
         signOut()
