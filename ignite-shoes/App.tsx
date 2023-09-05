@@ -20,6 +20,22 @@ export default function App() {
 
   tagUserInfoCreate()
 
+  useEffect(() => {
+    const unsubscribe = OneSignal.setNotificationOpenedHandler((response) => {
+      const {actionId} = response.action as any;
+
+      switch (actionId) {
+        case '1':
+          return console.log('ver')
+        case '2':
+          return console.log('fechar')
+        default: 'Não foi escolhido nenuma opção'
+      }
+    })
+
+    return () => unsubscribe
+  }, [])
+
   return (
     <NativeBaseProvider theme={THEME}>
       <StatusBar
