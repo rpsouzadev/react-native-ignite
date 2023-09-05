@@ -25,7 +25,14 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
+          <string>ignite-shoes-app</string>
           <string>com.rocketseat.igniteshoesapp</string>
+        </array>
+      </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>exp+ignite-shoes-app</string>
         </array>
       </dict>
     </array>
