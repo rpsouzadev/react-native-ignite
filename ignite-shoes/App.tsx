@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import OneSignal from 'react-native-onesignal';
 import { NativeBaseProvider } from 'native-base';
@@ -10,6 +11,7 @@ import { THEME } from './src/theme';
 import { Loading } from './src/components/Loading';
 
 import { CartContextProvider } from './src/contexts/CartContext';
+
 
 OneSignal.setAppId(process.env.EXPO_PUBLIC_ONE_SIGNAL_ID);
 
