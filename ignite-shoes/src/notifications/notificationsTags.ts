@@ -2,7 +2,10 @@ import OneSignal from "react-native-onesignal";
 
 export function tagUserInfoCreate() {
   OneSignal.sendTags({
-    'user_name': 'Rpsouza',
-    'user_email': 'rpsouza.linux@gmail.com'
+    
   })
+}
+
+export function tagCartUpdate(itemCount: string) {
+  OneSignal.sendTag('cart_items_count', itemCount)
 }
