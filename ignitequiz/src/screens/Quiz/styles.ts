@@ -23,4 +23,7 @@ export const styles = StyleSheet.create({
     color: THEME.COLORS.GREY_100,
     fontFamily: THEME.FONTS.BOLD,
   },
+  header: {
+    width: '100%',
+  }
 });

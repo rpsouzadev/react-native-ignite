@@ -13,7 +13,7 @@ import { Question } from '../../components/Question';
 import { QuizHeader } from '../../components/QuizHeader';
 import { ConfirmButton } from '../../components/ConfirmButton';
 import { OutlineButton } from '../../components/OutlineButton';
-import Animated, { Easing, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, Extrapolate, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { ProgressBar } from '../../components/ProgressBar';
 import { THEME } from '../../styles/theme';
 
@@ -123,11 +123,22 @@ export function Quiz() {
 
   const fixedProgressBarStyles = useAnimatedStyle(() => {
     return {
+      zIndex: 1,
       left: '-5%',
       width: '110%',
       paddingTop: 50,
       position: 'absolute',
       backgroundColor: THEME.COLORS.GREY_500,
+      opacity: interpolate(scrollY.value, [50, 90], [0, 1], Extrapolate.CLAMP),
+      transform: [
+        { translateY: interpolate(scrollY.value, [50, 100], [-40, 0], Extrapolate.CLAMP) }
+      ]
+    }
+  })
+
+  const headerAnimatedStyles = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(scrollY.value, [60, 90], [1, 0], Extrapolate.CLAMP),
     }
   })
 
@@ -166,12 +177,13 @@ export function Quiz() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.question}
       >
-        <QuizHeader
-          title={quiz.title}
-          currentQuestion={currentQuestion + 1}
-          totalOfQuestions={quiz.questions.length}
-        />
-
+        <Animated.View style={[styles.header, headerAnimatedStyles]}>
+          <QuizHeader
+            title={quiz.title}
+            currentQuestion={currentQuestion + 1}
+            totalOfQuestions={quiz.questions.length}
+          />
+        </Animated.View>
         <Animated.View style={shakeStylesAnimated}>
           <Question
             key={quiz.questions[currentQuestion].title}
