@@ -15,5 +15,12 @@ export const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     marginTop: 24,
-  }
+  },
+  title: {
+    fontSize: 16,
+    marginBottom: 7,
+    textAlign: 'center',
+    color: THEME.COLORS.GREY_100,
+    fontFamily: THEME.FONTS.BOLD,
+  },
 });
