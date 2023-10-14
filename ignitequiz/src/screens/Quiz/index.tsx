@@ -13,7 +13,7 @@ import { Question } from '../../components/Question';
 import { QuizHeader } from '../../components/QuizHeader';
 import { ConfirmButton } from '../../components/ConfirmButton';
 import { OutlineButton } from '../../components/OutlineButton';
-import Animated, { Easing, interpolate, useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 
 interface Params {
   id: string;
@@ -34,6 +34,7 @@ export function Quiz() {
   const { id } = route.params as Params;
 
   const shake = useSharedValue(0);
+  const scrollY = useSharedValue(0);
 
   function handleSkipConfirm() {
     Alert.alert('Pular', 'Deseja realmente pular a questão?', [
@@ -112,6 +113,12 @@ export function Quiz() {
     }
   })
 
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll(event, context) {
+      scrollY.value = event.contentOffset.y
+    },
+  })
+
   useEffect(() => {
     const quizSelected = QUIZ.filter(item => item.id === id)[0];
     setQuiz(quizSelected);
@@ -130,7 +137,9 @@ export function Quiz() {
 
   return (
     <View style={styles.container}>
-      <ScrollView
+      <Animated.ScrollView
+        onScroll={scrollHandler}
+        scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.question}
       >
@@ -152,7 +161,7 @@ export function Quiz() {
           <OutlineButton title="Parar" onPress={handleStop} />
           <ConfirmButton onPress={handleConfirm} />
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
     </View >
   );
 }

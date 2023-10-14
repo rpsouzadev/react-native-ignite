@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
   },
   history: {
     padding: 32,
+    flexGrows: 1,
   },
   SwipeableContainer: {
     height: 90,
