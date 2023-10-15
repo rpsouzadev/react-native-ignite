@@ -1,7 +1,8 @@
 import { BlurMask, Canvas, Rect } from "@shopify/react-native-skia";
 import { useWindowDimensions } from "react-native";
-import Animated from "react-native-reanimated";
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withSequence, withTiming } from "react-native-reanimated";
 import { THEME } from "../../styles/theme";
+import { useEffect } from "react";
 
 const STATUS = ['transparent', THEME.COLORS.BRAND_LIGHT, THEME.COLORS.DANGER_LIGHT];
 
@@ -10,12 +11,27 @@ type OverlayFeedbackProps = {
 }
 
 export default function OverlayFeedback({status}: OverlayFeedbackProps) {
+  const opacity = useSharedValue(0)
+
   const color = STATUS[status];
 
   const { height, width } = useWindowDimensions()
+
+  const styleAnimated = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+    }
+  })
   
+  useEffect(() => {
+    opacity.value = withSequence(
+      withTiming(1, { duration: 400, easing: Easing.bounce}),
+      withTiming(0)
+    )
+  }, [status])
+
   return (
-    <Animated.View style={{ height, width, position: 'absolute' }}>
+    <Animated.View style={[{ height, width, position: 'absolute' }, styleAnimated]}>
       <Canvas style={{flex: 1}}>
       <Rect
         x={0}
