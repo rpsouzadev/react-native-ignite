@@ -1,18 +1,18 @@
+import { useEffect } from 'react';
 import { Text, TouchableOpacity, TouchableOpacityProps } from 'react-native';
-
-import { styles } from './styles';
-import { 
+import {
   Canvas,
   Path,
-  Skia, 
+  Skia,
   useValue,
   runTiming,
   BlurMask,
   Circle,
-  Easing,
+  Easing
 } from '@shopify/react-native-skia';
+
+import { styles } from './styles';
 import { THEME } from '../../styles/theme';
-import { useEffect } from 'react';
 
 type Props = TouchableOpacityProps & {
   checked: boolean;
@@ -23,27 +23,23 @@ const CHECK_SIZE = 28;
 const CHECK_STROKE = 2;
 
 export function Option({ checked, title, ...rest }: Props) {
-  const percentage = useValue(0)
-  const circle = useValue(0)
+  const percentage = useValue(0);
+  const circle = useValue(0);
 
-  const RADIUS = (CHECK_SIZE - CHECK_STROKE) / 2
-  const CENTER_CIRCLE = RADIUS / 2
+  const RADIUS = (CHECK_SIZE - CHECK_STROKE) / 2;
+  const CENTER_CIRCLE = RADIUS / 2;
 
   const path = Skia.Path.Make();
-  path.addCircle(CHECK_SIZE, CHECK_SIZE, RADIUS);
+  path.addCircle(CHECK_SIZE, CHECK_SIZE, RADIUS)
 
   useEffect(() => {
-    if (checked) {
+    if(checked) {
       runTiming(percentage, 1, { duration: 700 })
       runTiming(circle, CENTER_CIRCLE, { easing: Easing.bounce })
-    }else {
-      runTiming(percentage, 0, { duration: 700 })
+    } else {
       runTiming(circle, 0, { duration: 300 })
     }
-  
-   
-  }, [checked])
-  
+  },[checked])
 
   return (
     <TouchableOpacity
@@ -51,7 +47,7 @@ export function Option({ checked, title, ...rest }: Props) {
         [
           styles.container,
           checked && styles.checked
-        ] 
+        ]
       }
       {...rest}
     >
@@ -59,13 +55,13 @@ export function Option({ checked, title, ...rest }: Props) {
         {title}
       </Text>
 
-      <Canvas style={{ height: CHECK_SIZE * 2, width: CHECK_SIZE * 2}}>
+      <Canvas style={{ height: CHECK_SIZE * 2, width: CHECK_SIZE * 2 }}>
         <Path 
           path={path}
           color={THEME.COLORS.GREY_500}
           style="stroke"
           strokeWidth={CHECK_STROKE}
-        />
+        /> 
 
         <Path 
           path={path}
@@ -75,7 +71,7 @@ export function Option({ checked, title, ...rest }: Props) {
           start={0}
           end={percentage}
         >
-          <BlurMask blur={1} style='solid' />
+          <BlurMask blur={1} style="solid" />
         </Path>
 
         <Circle 
@@ -84,9 +80,8 @@ export function Option({ checked, title, ...rest }: Props) {
           r={circle}
           color={THEME.COLORS.BRAND_LIGHT}
         >
-          <BlurMask blur={4} style='solid' />
+          <BlurMask blur={4} style="solid" />
         </Circle>
-
       </Canvas>
     </TouchableOpacity>
   );

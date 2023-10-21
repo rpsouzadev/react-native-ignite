@@ -10,7 +10,7 @@
 
 ## 💻 Projeto
 
-ignitequiz_template
+ignite-rn-06-ignite-quiz
 
 ## 📝 Licença
 

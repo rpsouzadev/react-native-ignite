@@ -17,13 +17,14 @@ export const styles = StyleSheet.create({
     marginTop: 24,
   },
   title: {
+    fontFamily: THEME.FONTS.BOLD,
+    color: THEME.COLORS.GREY_100,
     fontSize: 16,
     marginBottom: 7,
-    textAlign: 'center',
-    color: THEME.COLORS.GREY_100,
-    fontFamily: THEME.FONTS.BOLD,
+    textAlign: 'center'
   },
   header: {
     width: '100%',
+    marginBottom: 21
   }
 });
