@@ -5,11 +5,15 @@ import {
   Roboto_400Regular,
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto'
+import { AppProvider, UserProvider } from '@realm/react'
 
 import theme from './src/theme'
 
+import { Home } from '@screens/Home'
 import { SignIn } from './src/screens/SignIn'
 import { Loading } from '@components/Loading'
+
+const REALM_APP_ID = process.env.EXPO_PUBLIC_REALM_APP_ID as string
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -22,13 +26,17 @@ export default function App() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <SignIn />
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="transparent"
-        translucent
-      />
-    </ThemeProvider>
+    <AppProvider id={REALM_APP_ID}>
+      <ThemeProvider theme={theme}>
+        <UserProvider fallback={<SignIn />}>
+          <Home />
+        </UserProvider>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent
+        />
+      </ThemeProvider>
+    </AppProvider>
   )
 }
