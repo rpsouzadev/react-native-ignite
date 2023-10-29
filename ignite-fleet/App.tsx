@@ -5,6 +5,7 @@ import {
   Roboto_400Regular,
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto'
+import { RealmProvider } from '@libs/realm'
 import { AppProvider, UserProvider } from '@realm/react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
@@ -31,7 +32,9 @@ export default function App() {
       <ThemeProvider theme={theme}>
         <SafeAreaProvider>
           <UserProvider fallback={<SignIn />}>
-            <Routes />
+            <RealmProvider>
+              <Routes />
+            </RealmProvider>
           </UserProvider>
           <StatusBar
             barStyle="light-content"
