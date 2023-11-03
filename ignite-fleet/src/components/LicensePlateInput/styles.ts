@@ -1,3 +1,4 @@
+import { TextInput } from 'react-native'
 import styled from 'styled-components/native'
 
 export const Container = styled.View`
@@ -11,7 +12,7 @@ export const Label = styled.Text`
   font-size: ${({ theme }) => theme.FONT_SIZE.SM}px;
   font-family: ${({ theme }) => theme.FONT_FAMILY.REGULAR};
 `
-export const Input = styled.TextInput`
+export const Input = styled(TextInput)`
   margin-top: 16px;
   text-align: center;
   color: ${({ theme }) => theme.COLORS.GRAY_200};

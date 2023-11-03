@@ -22,6 +22,9 @@
       "@libs/*": [
         "./src/libs/*"
       ],
+      "@utils/*": [
+        "./src/utils/*"
+      ],
       "@services/*": [
         "./src/services/*"
       ],
