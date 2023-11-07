@@ -13,7 +13,13 @@ export function useHome() {
   const historic = useQuery(Historic)
 
   function handleRegisterMovement() {
-    navigation.navigate('departure')
+    if (vehicleInUse?._id) {
+      return navigation.navigate('arrival', {
+        id: vehicleInUse?._id.toString(),
+      })
+    } else {
+      navigation.navigate('departure')
+    }
   }
 
   function fetchVehicle() {
