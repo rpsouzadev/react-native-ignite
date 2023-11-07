@@ -9,7 +9,7 @@ type CarStatusProps = TouchableOpacityProps & {
 
 export function CarStatus({ licensePlate = null, ...rest }: CarStatusProps) {
   const theme = useTheme()
-  const Icon = licensePlate ? Key : Car
+  const Icon = licensePlate ? Car : Key
   const status = licensePlate ? 'chagada' : 'saída'
   const message = licensePlate
     ? `Veículo ${licensePlate} em uso. `

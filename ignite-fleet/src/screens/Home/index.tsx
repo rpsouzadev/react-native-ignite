@@ -1,22 +1,21 @@
 import * as S from './styles'
-import { useNavigation } from '@react-navigation/native'
+import { useHome } from './useHome'
 
 import { HomeHeader } from '@components/HomeHeader'
 import { CarStatus } from '@components/CarStatus'
 
 export function Home() {
-  const navigation = useNavigation()
-
-  function handleRegisterMovement() {
-    navigation.navigate('departure')
-  }
+  const { vehicleInUse, handleRegisterMovement } = useHome()
 
   return (
     <S.Container>
       <HomeHeader />
 
       <S.Content>
-        <CarStatus onPress={handleRegisterMovement} />
+        <CarStatus
+          licensePlate={vehicleInUse?.license_plate}
+          onPress={handleRegisterMovement}
+        />
       </S.Content>
     </S.Container>
   )
