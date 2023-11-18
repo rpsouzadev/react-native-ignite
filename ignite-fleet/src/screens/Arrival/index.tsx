@@ -15,9 +15,11 @@ export function Arrival() {
     handleRemoveVehicleUsage,
   } = useArrival()
 
+  const title = historic?.status === 'arrival' ? 'Detalhes' : 'Chegada'
+
   return (
     <S.Container>
-      <Header title="Chegada" />
+      <Header title={title} />
 
       <S.Content>
         <S.Label>Placa do veículo</S.Label>
@@ -27,7 +29,9 @@ export function Arrival() {
         <S.Label>Finalidade</S.Label>
 
         <S.Description>{historic?.description}</S.Description>
+      </S.Content>
 
+      {historic?.status === 'departure' && (
         <S.Footer>
           <ButtonIcon icon={X} onPress={handleRemoveVehicleUsage} />
 
@@ -37,7 +41,7 @@ export function Arrival() {
             onPress={handleArrivalRegister}
           />
         </S.Footer>
-      </S.Content>
+      )}
     </S.Container>
   )
 }

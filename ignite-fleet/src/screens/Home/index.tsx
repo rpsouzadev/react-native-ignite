@@ -7,7 +7,12 @@ import { CarStatus } from '@components/CarStatus'
 import { HistoricCard } from '@components/HistoricCard'
 
 export function Home() {
-  const { vehicleInUse, vehicleHistoric, handleRegisterMovement } = useHome()
+  const {
+    vehicleInUse,
+    vehicleHistoric,
+    handleHistoricDetails,
+    handleRegisterMovement,
+  } = useHome()
 
   return (
     <S.Container>
@@ -24,7 +29,12 @@ export function Home() {
         <FlatList
           data={vehicleHistoric}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <HistoricCard data={item} />}
+          renderItem={({ item }) => (
+            <HistoricCard
+              data={item}
+              onPress={() => handleHistoricDetails(item.id)}
+            />
+          )}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 100 }}
           ListEmptyComponent={() => (

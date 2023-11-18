@@ -66,6 +66,10 @@ export function useHome() {
     }
   }
 
+  function handleHistoricDetails(id: string) {
+    navigation.navigate('arrival', { id })
+  }
+
   useEffect(() => {
     fetchVehicleInUser()
   }, [])
@@ -73,7 +77,11 @@ export function useHome() {
   useEffect(() => {
     realm.addListener('change', () => fetchVehicleInUser())
 
-    return () => realm.removeListener('change', () => fetchVehicleInUser)
+    return () => {
+      if (realm && !realm.isClosed) {
+        realm.removeListener('change', () => fetchVehicleInUser)
+      }
+    }
   }, [])
 
   useEffect(() => {
@@ -83,6 +91,7 @@ export function useHome() {
   return {
     vehicleInUse,
     vehicleHistoric,
+    handleHistoricDetails,
     handleRegisterMovement,
   }
 }

@@ -18,7 +18,7 @@ export function CarStatus({ licensePlate = null, ...rest }: CarStatusProps) {
   return (
     <S.Container activeOpacity={0.7} {...rest}>
       <S.IconBox>
-        <Icon size={32} color={theme.COLORS.BRAND_LIGHT} />
+        <Icon size={52} color={theme.COLORS.BRAND_LIGHT} />
       </S.IconBox>
 
       <S.Message>
