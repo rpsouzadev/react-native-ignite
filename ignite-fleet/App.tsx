@@ -8,7 +8,7 @@ import {
   Roboto_400Regular,
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto'
-import { RealmProvider } from '@libs/realm'
+import { RealmProvider, syncConfig } from '@libs/realm'
 import { AppProvider, UserProvider } from '@realm/react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
@@ -37,7 +37,7 @@ export default function App() {
           style={{ flex: 1, backgroundColor: theme.COLORS.GRAY_800 }}
         >
           <UserProvider fallback={<SignIn />}>
-            <RealmProvider>
+            <RealmProvider sync={syncConfig} fallback={Loading}>
               <Routes />
             </RealmProvider>
           </UserProvider>
