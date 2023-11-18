@@ -1,12 +1,14 @@
 import { Alert } from 'react-native'
 import { useEffect, useState } from 'react'
 
-import { useQuery } from '@libs/realm'
+import { useQuery, useRealm } from '@libs/realm'
 import { Historic } from '@libs/realm/schemas/Historic'
 import { useNavigation } from '@react-navigation/native'
 
 export function useHome() {
   const [vehicleInUse, setVehicleInUse] = useState<Historic | null>(null)
+
+  const realm = useRealm()
 
   const navigation = useNavigation()
 
@@ -22,7 +24,7 @@ export function useHome() {
     }
   }
 
-  function fetchVehicle() {
+  function fetchVehicleInUser() {
     try {
       const vehicle = historic.filtered("status = 'departure'")[0]
       setVehicleInUse(vehicle)
@@ -36,7 +38,9 @@ export function useHome() {
   }
 
   useEffect(() => {
-    fetchVehicle()
+    realm.addListener('change', () => fetchVehicleInUser())
+
+    return () => realm.removeListener('change', () => fetchVehicleInUser)
   }, [])
 
   return {
