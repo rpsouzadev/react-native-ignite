@@ -8,7 +8,12 @@ import { Button } from '@components/Button'
 import { ButtonIcon } from '@components/ButtonIcon'
 
 export function Arrival() {
-  const { historic, handleRemoveVehicleUsage } = useArrival()
+  const {
+    historic,
+    isLoading,
+    handleArrivalRegister,
+    handleRemoveVehicleUsage,
+  } = useArrival()
 
   return (
     <S.Container>
@@ -26,7 +31,11 @@ export function Arrival() {
         <S.Footer>
           <ButtonIcon icon={X} onPress={handleRemoveVehicleUsage} />
 
-          <Button title="Registrar chegada" />
+          <Button
+            title="Registrar chegada"
+            isLoading={isLoading}
+            onPress={handleArrivalRegister}
+          />
         </S.Footer>
       </S.Content>
     </S.Container>
