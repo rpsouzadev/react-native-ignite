@@ -17,6 +17,8 @@ import theme from './src/theme'
 import { Routes } from '@routes/index'
 import { SignIn } from './src/screens/SignIn'
 import { Loading } from '@components/Loading'
+import { WifiSlash } from 'phosphor-react-native'
+import { TopMessage } from '@components/TopMessage'
 
 const REALM_APP_ID = process.env.EXPO_PUBLIC_REALM_APP_ID as string
 
@@ -36,11 +38,14 @@ export default function App() {
         <SafeAreaProvider
           style={{ flex: 1, backgroundColor: theme.COLORS.GRAY_800 }}
         >
+          <TopMessage title="Você está off-line" icon={WifiSlash} />
+
           <UserProvider fallback={<SignIn />}>
             <RealmProvider sync={syncConfig} fallback={Loading}>
               <Routes />
             </RealmProvider>
           </UserProvider>
+
           <StatusBar
             barStyle="light-content"
             backgroundColor="transparent"
