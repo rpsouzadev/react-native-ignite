@@ -14,6 +14,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 import theme from './src/theme'
 
+import { useNetInfo } from '@react-native-community/netinfo'
+
 import { Routes } from '@routes/index'
 import { SignIn } from './src/screens/SignIn'
 import { Loading } from '@components/Loading'
@@ -28,6 +30,8 @@ export default function App() {
     Roboto_700Bold,
   })
 
+  const netInfo = useNetInfo()
+
   if (!fontsLoaded) {
     return <Loading />
   }
@@ -38,7 +42,9 @@ export default function App() {
         <SafeAreaProvider
           style={{ flex: 1, backgroundColor: theme.COLORS.GRAY_800 }}
         >
-          <TopMessage title="Você está off-line" icon={WifiSlash} />
+          {!netInfo.isConnected && (
+            <TopMessage title="Você está off-line" icon={WifiSlash} />
+          )}
 
           <UserProvider fallback={<SignIn />}>
             <RealmProvider sync={syncConfig} fallback={Loading}>
