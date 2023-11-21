@@ -15,6 +15,7 @@ import {
 
 export function useHome() {
   const [vehicleInUse, setVehicleInUse] = useState<Historic | null>(null)
+  const [percentageToSync, setPercentageToSync] = useState<string | null>(null)
   const [vehicleHistoric, setVehicleHistoric] = useState<HistoricCardProps[]>(
     [],
   )
@@ -86,12 +87,17 @@ export function useHome() {
 
     if (percentage === 100) {
       await saveLastSyncTimestamp()
-      fetchHistoric()
+      await fetchHistoric()
+      setPercentageToSync(null)
 
       Toast.show({
         type: 'info',
         text1: 'Todos os dados estão sincronizados.',
       })
+    }
+
+    if (percentage < 100) {
+      setPercentageToSync(`${percentage.toFixed(0)}% sincronizado.`)
     }
   }
 
@@ -142,6 +148,7 @@ export function useHome() {
   return {
     vehicleInUse,
     vehicleHistoric,
+    percentageToSync,
     handleHistoricDetails,
     handleRegisterMovement,
   }

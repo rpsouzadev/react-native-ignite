@@ -1,21 +1,28 @@
 import * as S from './styles'
 import { useHome } from './useHome'
 import { FlatList } from 'react-native'
+import { CloudArrowUp } from 'phosphor-react-native'
 
-import { HomeHeader } from '@components/HomeHeader'
 import { CarStatus } from '@components/CarStatus'
+import { HomeHeader } from '@components/HomeHeader'
+import { TopMessage } from '@components/TopMessage'
 import { HistoricCard } from '@components/HistoricCard'
 
 export function Home() {
   const {
     vehicleInUse,
     vehicleHistoric,
+    percentageToSync,
     handleHistoricDetails,
     handleRegisterMovement,
   } = useHome()
 
   return (
     <S.Container>
+      {percentageToSync && (
+        <TopMessage title={percentageToSync} icon={CloudArrowUp} />
+      )}
+
       <HomeHeader />
 
       <S.Content>
