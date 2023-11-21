@@ -1,5 +1,6 @@
 import { Alert } from 'react-native'
 import { useEffect, useState } from 'react'
+import Toast from 'react-native-toast-message'
 
 import dayjs from 'dayjs'
 import { useUser, Realm } from '@realm/react'
@@ -86,6 +87,11 @@ export function useHome() {
     if (percentage === 100) {
       await saveLastSyncTimestamp()
       fetchHistoric()
+
+      Toast.show({
+        type: 'info',
+        text1: 'Todos os dados estão sincronizados.',
+      })
     }
   }
 
