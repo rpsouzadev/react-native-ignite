@@ -7,6 +7,10 @@ import { useQuery, useRealm } from '@libs/realm'
 import { Historic } from '@libs/realm/schemas/Historic'
 import { useNavigation } from '@react-navigation/native'
 import { HistoricCardProps } from '@components/HistoricCard'
+import {
+  getLastSyncTimestamp,
+  saveLastSyncTimestamp,
+} from '@libs/asyncStorage/syncStorage'
 
 export function useHome() {
   const [vehicleInUse, setVehicleInUse] = useState<Historic | null>(null)
@@ -43,16 +47,18 @@ export function useHome() {
     }
   }
 
-  function fetchHistoric() {
+  async function fetchHistoric() {
     try {
       const response = historic.filtered(
         "status = 'arrival' SORT(created_at DESC)",
       )
 
+      const lastSync = await getLastSyncTimestamp()
+
       const formatthedHistoric = response.map((item) => {
         return {
           id: item._id,
-          isSync: false,
+          isSync: lastSync > item.updated_at!.getTime(),
           licensePlate: item.license_plate,
           created: dayjs(item.created_at).format(
             '[Saída em] DD/MM/YYYY [às] HH:mm',
@@ -71,10 +77,16 @@ export function useHome() {
     navigation.navigate('arrival', { id })
   }
 
-  function progressNotification(transferred: number, transferable: number) {
+  async function progressNotification(
+    transferred: number,
+    transferable: number,
+  ) {
     const percentage = (transferred / transferable) * 100
 
-    console.log('progressNotification => ', percentage)
+    if (percentage === 100) {
+      await saveLastSyncTimestamp()
+      fetchHistoric()
+    }
   }
 
   useEffect(() => {
