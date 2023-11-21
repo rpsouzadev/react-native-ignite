@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Alert } from 'react-native'
 
 import { BSON } from 'realm'
 import { useObject, useRealm } from '@libs/realm'
 import { Historic } from '@libs/realm/schemas/Historic'
 import { useRoute, useNavigation } from '@react-navigation/native'
+import { getLastSyncTimestamp } from '@libs/asyncStorage/syncStorage'
 
 type RouteParamsProps = {
   id: string
@@ -12,6 +13,7 @@ type RouteParamsProps = {
 
 export function useArrival() {
   const [isLoading, setIsLoading] = useState(false)
+  const [dataNotSynced, setDataNotSynced] = useState(false)
 
   const route = useRoute()
   const navigation = useNavigation()
@@ -65,9 +67,22 @@ export function useArrival() {
     }
   }
 
+  async function notSynced() {
+    const lastSync = await getLastSyncTimestamp()
+
+    if (historic!.updated_at.getTime() > lastSync) {
+      setDataNotSynced(true)
+    }
+  }
+
+  useEffect(() => {
+    notSynced()
+  }, [])
+
   return {
     historic,
     isLoading,
+    dataNotSynced,
     handleArrivalRegister,
     handleRemoveVehicleUsage,
   }

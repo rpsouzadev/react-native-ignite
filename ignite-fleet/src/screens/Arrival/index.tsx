@@ -11,6 +11,7 @@ export function Arrival() {
   const {
     historic,
     isLoading,
+    dataNotSynced,
     handleArrivalRegister,
     handleRemoveVehicleUsage,
   } = useArrival()
@@ -41,6 +42,14 @@ export function Arrival() {
             onPress={handleArrivalRegister}
           />
         </S.Footer>
+      )}
+
+      {dataNotSynced && (
+        <S.AsyncMessage>
+          Sinconização da
+          {historic?.status === 'departure' ? ' partda ' : ' chegada '}
+          pendente.
+        </S.AsyncMessage>
       )}
     </S.Container>
   )
