@@ -1,7 +1,8 @@
 import { useUser } from '@realm/react'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Alert, TextInput } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { useForegroundPermissions } from 'expo-location'
 
 import { useRealm } from '@libs/realm'
 import { Historic } from '@libs/realm/schemas/Historic'
@@ -12,6 +13,9 @@ export function useDeparture() {
   const [description, setDescription] = useState('')
   const [licensePlate, setLicensePlate] = useState('')
   const [isRegistering, setIsRegistering] = useState(false)
+
+  const [locationForegroundPermission, requestLocationForegroundPermission] =
+    useForegroundPermissions()
 
   const navigation = useNavigation()
   const realm = useRealm()
@@ -64,6 +68,10 @@ export function useDeparture() {
     }
   }
 
+  useEffect(() => {
+    requestLocationForegroundPermission()
+  }, [])
+
   return {
     isRegistering,
     descriptionRef,
@@ -71,5 +79,6 @@ export function useDeparture() {
     licensePlateRef,
     setLicensePlate,
     handleDepartureRegister,
+    locationForegroundPermission,
   }
 }

@@ -15,7 +15,20 @@ export function Departure() {
     setLicensePlate,
     licensePlateRef,
     handleDepartureRegister,
+    locationForegroundPermission,
   } = useDeparture()
+
+  if (!locationForegroundPermission?.granted) {
+    return (
+      <S.Container>
+        <Header title="Saída" />
+
+        <S.Message>
+          Você precisa permitir que o aplicativo tenha acesso a localização.
+        </S.Message>
+      </S.Container>
+    )
+  }
 
   return (
     <S.Container>
