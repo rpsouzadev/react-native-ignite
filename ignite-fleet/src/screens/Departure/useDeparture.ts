@@ -2,7 +2,12 @@ import { useUser } from '@realm/react'
 import { useState, useRef, useEffect } from 'react'
 import { Alert, TextInput } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { useForegroundPermissions } from 'expo-location'
+import {
+  useForegroundPermissions,
+  watchPositionAsync,
+  LocationAccuracy,
+  LocationSubscription,
+} from 'expo-location'
 
 import { useRealm } from '@libs/realm'
 import { Historic } from '@libs/realm/schemas/Historic'
@@ -71,6 +76,26 @@ export function useDeparture() {
   useEffect(() => {
     requestLocationForegroundPermission()
   }, [])
+
+  useEffect(() => {
+    if (!locationForegroundPermission?.granted) {
+      return
+    }
+
+    let subscription: LocationSubscription
+
+    watchPositionAsync(
+      {
+        accuracy: LocationAccuracy.High,
+        timeInterval: 1000,
+      },
+      (location) => {
+        console.log('Location => ', location)
+      },
+    ).then((response) => (subscription = response))
+
+    return () => subscription.remove()
+  }, [locationForegroundPermission])
 
   return {
     isRegistering,
