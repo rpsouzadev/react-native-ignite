@@ -21,6 +21,6 @@ describe('Component: SelectList', () => {
     
     fireEvent.press(selectedCity)
 
-    expect(onPress).toHaveBeenCalledTimes(1)
+    expect(onPress).toHaveBeenCalledWith(data[1])
   })
 })
