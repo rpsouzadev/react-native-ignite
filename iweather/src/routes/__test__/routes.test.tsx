@@ -1,7 +1,9 @@
 import { Routes } from "../index"
+import { api } from "@services/api"
 import { CityProps } from "@services/getCityByNameService"
 import { saveStorageCity } from "@libs/asyncStorage/cityStorage"
 import { render, screen, waitFor } from "@__tests__/utils/customRender"
+import { mockWeatherAPIResponse } from "@__tests__/mocks/api/mockWeatherAPIResponse"
 
 const newCity: CityProps = {
   id: '1',
@@ -19,10 +21,12 @@ describe("Routes", () => {
   })
 
   it("should be render Dashboard screen when has city selected.", async () => {
+    jest.spyOn(api, 'get').mockResolvedValue({ data: mockWeatherAPIResponse })
+
     await saveStorageCity(newCity)
-    const { debug } = render(<Routes />)
-    debug()
-    // const title = await waitFor(() => screen.findByText(/^escolha um local/i))
-    // expect(title).toBeTruthy()
+    render(<Routes />)
+   
+    const title = await waitFor(() => screen.getByText(newCity.name))
+    expect(title).toBeTruthy()
   })
 })
