@@ -1,10 +1,11 @@
-import { CityProvider } from "@contexts/CityContext"
 import { useCity } from "@hooks/useCity"
-import { renderHook } from "@testing-library/react-native"
+import { CityProvider } from "@contexts/CityContext"
+import { renderHook, waitFor, act } from "@testing-library/react-native"
 
 describe("Context: CityContext", () => {
-  it("should be change selected city", () => {
+  it("should be change selected city", async () => {
     const {result} = renderHook(() => useCity(), { wrapper: CityProvider })
-    console.log('result => ', result.current)
+
+    await waitFor(() => act(() => console.log('result => ', result.current)))
   })
 })
