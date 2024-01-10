@@ -5,18 +5,20 @@ import { act, fireEvent, render, screen, waitFor, waitForElementToBeRemoved } fr
 import { mockCityAPIResponse } from '@__tests__/mocks/api/mockCityAPIResponse'
 import { mockWeatherAPIResponse } from '@__tests__/mocks/api/mockWeatherAPIResponse'
 
-const newCity = {
-  id: '1',
-  name: 'Salvador',
-  latitude: 123,
-  longitude: 456
-}
-
 describe('Screen: Dashboard', () => {
-  it('should be show city weather', async () => {
-    jest.spyOn(api, 'get').mockResolvedValue({ data: mockWeatherAPIResponse })
+  beforeAll(async () => {
+    const newCity = {
+      id: '1',
+      name: 'Salvador',
+      latitude: 123,
+      longitude: 456
+    }
 
     await saveStorageCity(newCity)
+  })
+
+  it('should be show city weather', async () => {
+    jest.spyOn(api, 'get').mockResolvedValue({ data: mockWeatherAPIResponse })
 
     render(<Dashboard />)
     
@@ -25,8 +27,6 @@ describe('Screen: Dashboard', () => {
   })
   
   it('should be show another selected weather city', async () => {
-    await saveStorageCity(newCity)
-
     jest.spyOn(api, 'get')
     .mockResolvedValueOnce({ data: mockWeatherAPIResponse })
     .mockResolvedValueOnce({ data: mockCityAPIResponse })
