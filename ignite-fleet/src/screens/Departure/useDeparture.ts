@@ -18,6 +18,7 @@ import { licensePlateValidate } from '@utils/licensePlateValidate'
 export function useDeparture() {
   const [description, setDescription] = useState('')
   const [licensePlate, setLicensePlate] = useState('')
+  const [currentAddress, setCurrentAddress] = useState<string | null>(null)
   const [isRegistering, setIsRegistering] = useState(false)
   const [isLoadingLocation, setIsLoadingLocation] = useState(true)
 
@@ -93,7 +94,11 @@ export function useDeparture() {
       },
       (location) => {
         getAddressLocation(location.coords)
-          .then((address) => console.log(address))
+          .then((address) => {
+            if (address) {
+              setCurrentAddress(address)
+            }
+          })
           .finally(() => setIsLoadingLocation(false))
       },
     ).then((response) => (subscription = response))
@@ -109,6 +114,7 @@ export function useDeparture() {
     isRegistering,
     descriptionRef,
     setDescription,
+    currentAddress,
     licensePlateRef,
     setLicensePlate,
     isLoadingLocation,

@@ -5,6 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Header } from '@components/Header'
 import { Button } from '@components/Button'
 import { Loading } from '@components/Loading'
+import { LocationInfo } from '@components/LocationInfo'
 import { TextAreaInput } from '@components/TextAreaInput'
 import { LicensePlateInput } from '@components/LicensePlateInput'
 
@@ -13,6 +14,7 @@ export function Departure() {
     isRegistering,
     descriptionRef,
     setDescription,
+    currentAddress,
     setLicensePlate,
     licensePlateRef,
     isLoadingLocation,
@@ -42,6 +44,13 @@ export function Departure() {
 
       <KeyboardAwareScrollView extraHeight={100}>
         <S.Content>
+          {currentAddress && (
+            <LocationInfo
+              label="Localização atual"
+              description={currentAddress}
+            />
+          )}
+
           <LicensePlateInput
             ref={licensePlateRef}
             returnKeyType="next"
