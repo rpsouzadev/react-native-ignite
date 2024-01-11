@@ -19,6 +19,7 @@ export function useDeparture() {
   const [description, setDescription] = useState('')
   const [licensePlate, setLicensePlate] = useState('')
   const [isRegistering, setIsRegistering] = useState(false)
+  const [isLoadingLocation, setIsLoadingLocation] = useState(true)
 
   const [locationForegroundPermission, requestLocationForegroundPermission] =
     useForegroundPermissions()
@@ -91,13 +92,17 @@ export function useDeparture() {
         timeInterval: 1000,
       },
       (location) => {
-        getAddressLocation(location.coords).then((address) =>
-          console.log(address),
-        )
+        getAddressLocation(location.coords)
+          .then((address) => console.log(address))
+          .finally(() => setIsLoadingLocation(false))
       },
     ).then((response) => (subscription = response))
 
-    return () => subscription.remove()
+    return () => {
+      if (subscription) {
+        subscription.remove()
+      }
+    }
   }, [locationForegroundPermission])
 
   return {
@@ -106,6 +111,7 @@ export function useDeparture() {
     setDescription,
     licensePlateRef,
     setLicensePlate,
+    isLoadingLocation,
     handleDepartureRegister,
     locationForegroundPermission,
   }

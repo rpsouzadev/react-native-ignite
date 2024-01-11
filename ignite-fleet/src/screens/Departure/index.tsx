@@ -4,6 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 import { Header } from '@components/Header'
 import { Button } from '@components/Button'
+import { Loading } from '@components/Loading'
 import { TextAreaInput } from '@components/TextAreaInput'
 import { LicensePlateInput } from '@components/LicensePlateInput'
 
@@ -14,9 +15,14 @@ export function Departure() {
     setDescription,
     setLicensePlate,
     licensePlateRef,
+    isLoadingLocation,
     handleDepartureRegister,
     locationForegroundPermission,
   } = useDeparture()
+
+  if (isLoadingLocation) {
+    return <Loading />
+  }
 
   if (!locationForegroundPermission?.granted) {
     return (
