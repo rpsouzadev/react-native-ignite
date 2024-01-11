@@ -2,6 +2,8 @@ import * as S from './styles'
 import { useDeparture } from './useDeparture'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
+import { Car } from 'phosphor-react-native'
+
 import { Header } from '@components/Header'
 import { Button } from '@components/Button'
 import { Loading } from '@components/Loading'
@@ -46,6 +48,7 @@ export function Departure() {
         <S.Content>
           {currentAddress && (
             <LocationInfo
+              icon={Car}
               label="Localização atual"
               description={currentAddress}
             />
