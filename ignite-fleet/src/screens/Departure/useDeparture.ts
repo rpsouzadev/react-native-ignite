@@ -12,6 +12,7 @@ import {
 import { useRealm } from '@libs/realm'
 import { Historic } from '@libs/realm/schemas/Historic'
 
+import { getAddressLocation } from '@utils/getAddressLocation'
 import { licensePlateValidate } from '@utils/licensePlateValidate'
 
 export function useDeparture() {
@@ -90,7 +91,9 @@ export function useDeparture() {
         timeInterval: 1000,
       },
       (location) => {
-        console.log('Location => ', location)
+        getAddressLocation(location.coords).then((address) =>
+          console.log(address),
+        )
       },
     ).then((response) => (subscription = response))
 
