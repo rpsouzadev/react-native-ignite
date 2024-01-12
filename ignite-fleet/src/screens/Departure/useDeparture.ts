@@ -7,6 +7,7 @@ import {
   watchPositionAsync,
   LocationAccuracy,
   LocationSubscription,
+  LocationObjectCoords,
 } from 'expo-location'
 
 import { useRealm } from '@libs/realm'
@@ -18,9 +19,11 @@ import { licensePlateValidate } from '@utils/licensePlateValidate'
 export function useDeparture() {
   const [description, setDescription] = useState('')
   const [licensePlate, setLicensePlate] = useState('')
-  const [currentAddress, setCurrentAddress] = useState<string | null>(null)
   const [isRegistering, setIsRegistering] = useState(false)
   const [isLoadingLocation, setIsLoadingLocation] = useState(true)
+  const [currentAddress, setCurrentAddress] = useState<string | null>(null)
+  const [currentCoords, setCurrentCoords] =
+    useState<LocationObjectCoords | null>(null)
 
   const [locationForegroundPermission, requestLocationForegroundPermission] =
     useForegroundPermissions()
@@ -93,6 +96,8 @@ export function useDeparture() {
         timeInterval: 1000,
       },
       (location) => {
+        setCurrentCoords(location.coords)
+
         getAddressLocation(location.coords)
           .then((address) => {
             if (address) {
@@ -112,6 +117,7 @@ export function useDeparture() {
 
   return {
     isRegistering,
+    currentCoords,
     descriptionRef,
     setDescription,
     currentAddress,

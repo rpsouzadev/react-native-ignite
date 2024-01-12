@@ -10,10 +10,12 @@ import { Loading } from '@components/Loading'
 import { LocationInfo } from '@components/LocationInfo'
 import { TextAreaInput } from '@components/TextAreaInput'
 import { LicensePlateInput } from '@components/LicensePlateInput'
+import { Map } from '@components/Map'
 
 export function Departure() {
   const {
     isRegistering,
+    currentCoords,
     descriptionRef,
     setDescription,
     currentAddress,
@@ -45,6 +47,8 @@ export function Departure() {
       <Header title="Saída" />
 
       <KeyboardAwareScrollView extraHeight={100}>
+        {currentCoords && <Map coordinates={[currentCoords]} />}
+
         <S.Content>
           {currentAddress && (
             <LocationInfo
