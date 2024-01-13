@@ -47,7 +47,14 @@ export function Departure() {
       <Header title="Saída" />
 
       <KeyboardAwareScrollView extraHeight={100}>
-        {currentCoords && <Map coordinates={[currentCoords]} />}
+        {currentCoords && (
+          <Map
+            coordinates={[
+              { latitude: -12.9248, longitude: -38.483 },
+              { latitude: -12.922, longitude: -38.4827 },
+            ]}
+          />
+        )}
 
         <S.Content>
           {currentAddress && (
