@@ -1,4 +1,5 @@
 import * as TaskManager from 'expo-task-manager'
+import { Accuracy, startLocationUpdatesAsync } from 'expo-location'
 
 export const BACKGROUND_TASK_NAME = 'location-tracking'
 
@@ -16,8 +17,20 @@ TaskManager.defineTask(BACKGROUND_TASK_NAME, ({ data, error }: any) => {
       timestamp,
     }
 
-    console.error('currentLocation => ', currentLocation)
+    console.log('currentLocation => ', currentLocation)
   } catch (error) {
-    console.error('TaskManager error => ', error)
+    console.log('TaskManager error => ', error)
   }
 })
+
+export async function startLocationTask() {
+  try {
+    await startLocationUpdatesAsync(BACKGROUND_TASK_NAME, {
+      accuracy: Accuracy.Highest,
+      distanceInterval: 1,
+      timeInterval: 1000,
+    })
+  } catch (error) {
+    console.log('startLocationTask => ', error)
+  }
+}
