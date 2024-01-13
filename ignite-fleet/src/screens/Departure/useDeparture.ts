@@ -4,6 +4,7 @@ import { Alert, TextInput } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import {
   useForegroundPermissions,
+  requestBackgroundPermissionsAsync,
   watchPositionAsync,
   LocationAccuracy,
   LocationSubscription,
@@ -35,7 +36,7 @@ export function useDeparture() {
   const descriptionRef = useRef<TextInput>(null)
   const licensePlateRef = useRef<TextInput>(null)
 
-  function handleDepartureRegister() {
+  async function handleDepartureRegister() {
     try {
       if (!licensePlateValidate(licensePlate)) {
         licensePlateRef.current?.focus()
@@ -63,6 +64,17 @@ export function useDeparture() {
       }
 
       setIsRegistering(true)
+
+      const backgroundPermissions = await requestBackgroundPermissionsAsync()
+
+      if (!backgroundPermissions.granted) {
+        setIsRegistering(false)
+
+        return Alert.alert(
+          'Localização!',
+          'É necessário permitir que o App tenha acesso a localização em segundo plano. Acesse as configurações do dispositivo e habilite "Permitir o tempo todo"',
+        )
+      }
 
       realm.write(() => {
         realm.create(
