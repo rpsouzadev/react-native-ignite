@@ -12,6 +12,7 @@ module.exports = function (api) {
             '@libs': './src/libs',
             '@utils': './src/utils',
             '@hooks': './src/hooks',
+            '@tasks': './src/tasks',
             '@routes': './src/routes',
             '@assets': './src/assets',
             '@screens': './src/screens',
