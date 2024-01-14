@@ -6,6 +6,7 @@ import { useObject, useRealm } from '@libs/realm'
 import { Historic } from '@libs/realm/schemas/Historic'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { getLastSyncTimestamp } from '@libs/asyncStorage/syncStorage'
+import { stopLocationTask } from '@tasks/backgroundLocationTask'
 
 type RouteParamsProps = {
   id: string
@@ -42,13 +43,15 @@ export function useArrival() {
     navigation.goBack()
   }
 
-  function handleArrivalRegister() {
+  async function handleArrivalRegister() {
     try {
       setIsLoading(true)
 
       if (!historic) {
         return Alert.alert('Error', 'Não foi obter os dados do veículo.')
       }
+
+      await stopLocationTask()
 
       realm.write(() => {
         historic.status = 'arrival'
