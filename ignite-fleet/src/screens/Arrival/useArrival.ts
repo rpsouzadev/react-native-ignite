@@ -56,9 +56,12 @@ export function useArrival() {
         return Alert.alert('Error', 'Não foi obter os dados do veículo.')
       }
 
+      const locations = await getStorageLocations()
+
       realm.write(() => {
         historic.status = 'arrival'
         historic.updated_at = new Date()
+        historic.coords.push(...locations)
       })
 
       await stopLocationTask()
