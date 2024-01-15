@@ -7,6 +7,7 @@ import { Historic } from '@libs/realm/schemas/Historic'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { getLastSyncTimestamp } from '@libs/asyncStorage/syncStorage'
 import { stopLocationTask } from '@tasks/backgroundLocationTask'
+import { getStorageLocations } from '@libs/asyncStorage/locationStorage'
 
 type RouteParamsProps = {
   id: string
@@ -78,9 +79,16 @@ export function useArrival() {
     }
   }
 
+  async function getLocationsInfo() {
+    await notSynced()
+
+    const locationsStorage = await getStorageLocations()
+    console.log('locationsStorage => ' + JSON.stringify(locationsStorage))
+  }
+
   useEffect(() => {
-    notSynced()
-  }, [])
+    getLocationsInfo()
+  }, [historic])
 
   return {
     historic,
