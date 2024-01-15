@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
 import { Alert } from 'react-native'
+import { LatLng } from 'react-native-maps'
+import { useEffect, useState } from 'react'
 
 import { BSON } from 'realm'
 import { useObject, useRealm } from '@libs/realm'
@@ -16,6 +17,7 @@ type RouteParamsProps = {
 export function useArrival() {
   const [isLoading, setIsLoading] = useState(false)
   const [dataNotSynced, setDataNotSynced] = useState(false)
+  const [coordinates, setCoordinates] = useState<LatLng[]>([])
 
   const route = useRoute()
   const navigation = useNavigation()
@@ -29,17 +31,19 @@ export function useArrival() {
       { text: 'Não', style: 'cancel' },
       {
         text: 'Sim',
-        onPress: () => {
-          removeVehicleUsage()
+        onPress: async () => {
+          await removeVehicleUsage()
         },
       },
     ])
   }
 
-  function removeVehicleUsage() {
+  async function removeVehicleUsage() {
     realm.write(() => {
       realm.delete(historic)
     })
+
+    await stopLocationTask()
 
     navigation.goBack()
   }
@@ -52,12 +56,12 @@ export function useArrival() {
         return Alert.alert('Error', 'Não foi obter os dados do veículo.')
       }
 
-      await stopLocationTask()
-
       realm.write(() => {
         historic.status = 'arrival'
         historic.updated_at = new Date()
       })
+
+      await stopLocationTask()
 
       Alert.alert('Chegada', 'Chegada registrada com sucesso!')
 
@@ -83,7 +87,7 @@ export function useArrival() {
     await notSynced()
 
     const locationsStorage = await getStorageLocations()
-    console.log('locationsStorage => ' + JSON.stringify(locationsStorage))
+    setCoordinates(locationsStorage)
   }
 
   useEffect(() => {
@@ -93,6 +97,7 @@ export function useArrival() {
   return {
     historic,
     isLoading,
+    coordinates,
     dataNotSynced,
     handleArrivalRegister,
     handleRemoveVehicleUsage,

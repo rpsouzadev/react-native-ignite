@@ -6,11 +6,13 @@ import { useArrival } from './useArrival'
 import { Header } from '@components/Header'
 import { Button } from '@components/Button'
 import { ButtonIcon } from '@components/ButtonIcon'
+import { Map } from '@components/Map'
 
 export function Arrival() {
   const {
     historic,
     isLoading,
+    coordinates,
     dataNotSynced,
     handleArrivalRegister,
     handleRemoveVehicleUsage,
@@ -21,6 +23,8 @@ export function Arrival() {
   return (
     <S.Container>
       <Header title={title} />
+
+      {coordinates.length > 0 && <Map coordinates={coordinates} />}
 
       <S.Content>
         <S.Label>Placa do veículo</S.Label>
